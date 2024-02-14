@@ -7,12 +7,13 @@
 export async function main(ns: NS): Promise<void> {
     const hosts = ns.read('hosts.txt').split('\n')
     const memoryRequired = ns.getScriptRam('hack.js')
+    ns.tprint(`Memory required for hack.js: ${memoryRequired}`)
     for (const host of hosts) {
         try {
             ns.scp('hack.js', host)
             const serverMemory = ns.getServerMaxRam(host) - ns.getServerUsedRam(host)
             const threads = Math.floor(serverMemory / memoryRequired)
-            ns.exec('hack.js', host, threads)
+            ns.exec('hack.js', host, threads - 1, host)
             ns.tprint(`Hacking ${host} with ${threads} threads`)
         } catch {
             ns.tprint(`Failed to hack ${host}`)
