@@ -7,16 +7,6 @@
 
 There is a workspace file in `.vscode` which contains the recommended settings for all of these
 
-## Dependencies
-[Node.js](https://nodejs.org/en/download/) required for compiling typescript and installing dependencies
-
-## Installation
-```
-git clone https://github.com/bitburner-official/vscode-template
-npm install
-npm run defs
-```
-
 ## How to use this template
 Write all your typescript source code in the `/src` directory
 
