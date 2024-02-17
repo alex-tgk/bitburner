@@ -5,12 +5,12 @@
  * @returns A promise that resolves when the discovery process is complete.
  */
 export async function main(ns: NS): Promise<void> {
-    const allHosts = new Set<string>(); // Store all discovered hosts
+    //const allHosts = new Set<string>(); // Store all discovered hosts
     const startingHost = 'home'; // Usually start from 'home'
 
     // Start the discovery process by passing the ns object, the starting host, and the set of all hosts
-    await discoverHosts(ns, startingHost, allHosts);
-
+    //await discoverHosts(ns, startingHost, allHosts);
+    const allHosts = getAllServers(ns);
     // Write the discovered hosts to a file
     const filename = 'hosts.txt';
     // Ensure the file is empty before writing
@@ -19,7 +19,16 @@ export async function main(ns: NS): Promise<void> {
         await ns.write(filename, host + '\n', 'a'); // Append each host to the file
     }
 
-    ns.tprint(`Discovery complete. Found ${allHosts.size} hosts. Results saved to ${filename}`);
+    ns.tprint(`Discovery complete. Found ${allHosts.length} hosts. Results saved to ${filename}`);
+}
+
+function getAllServers(ns: NS, start = 'home', visited = [] as string[]) {
+    visited.push(start);
+    const neighbors = ns.scan(start).filter(server => !visited.includes(server));
+    for (const neighbor of neighbors) {
+        visited.push(...getAllServers(ns, neighbor, visited).filter(server => !visited.includes(server)))
+    }
+    return Array.from(visited);
 }
 
 /**

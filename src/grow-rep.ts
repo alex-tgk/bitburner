@@ -1,12 +1,6 @@
 /** @param {NS} ns **/
-export async function main(ns): Promise<void> {
+export async function main(ns: NS): Promise<void> {
     const factionName =  ns.args[0]
-    
-    // Check if we're already working for the target faction
-    if (!ns.workForFaction(factionName, "Hacking Contracts", true)) {
-        ns.tprint(`Error: Could not start work for faction ${factionName}. Make sure you're a member of the faction and have stopped any other work.`);
-        return;
-    }
     
     ns.tprint(`Started sharing for ${factionName}.`);
     

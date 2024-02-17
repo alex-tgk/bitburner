@@ -5,8 +5,7 @@
  * @returns A promise that resolves when all scripts have been executed.
  */
 export async function main(ns: NS): Promise<void> {
-    ns.exec('discover-hosts.js', 'home', 1);
-    ns.exec('nuke-hosts.js','home', 1);
-    ns.exec('hack-all-hosts.js', 'home', 1);
-    ns.exec('watcher.js', 'home', 1);
+    ns.run('watcher.js', 1);
+    ns.run('services/port-listen-service.js', 1)
+    ns.run('services/start-controller-services.js', 1);
 }
