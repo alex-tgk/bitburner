@@ -1,18 +1,13 @@
-/**
- * 
- * @param ns 
- */
 export async function main(ns: NS): Promise<void> {
-    while (true) {
-        const allHosts = getAllServers(ns);
-        const filename = 'hosts.txt';
-        await ns.write(filename, '', 'w');
-        for (const host of allHosts) {
-            await ns.write(filename, host + '\n', 'a');
-        }
-        await ns.sleep(5 * 1000);
-    }
+    const hosts = getAllServers(ns);
+    const stats = hosts.map(host => ({
+        host,
+        money: ns.getServerMoneyAvailable(host),
+        security: ns.getServerSecurityLevel(host)
+    }));
+
 }
+
 
 function getAllServers(ns: NS, start = 'home', visited = [] as string[]) {
     visited.push(start);

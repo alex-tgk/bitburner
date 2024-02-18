@@ -14,7 +14,7 @@ export async function main(ns: NS): Promise<void> {
 async function hackTarget(ns: NS, target: string): Promise<void> {
     const moneyThresh = ns.getServerMaxMoney(target) * 0.75;
     const securityThresh = ns.getServerMinSecurityLevel(target) + 5;
-
+    const money = ns.getServerMoneyAvailable(target);
     while (true) {
         try {
             await ns.hack(target)

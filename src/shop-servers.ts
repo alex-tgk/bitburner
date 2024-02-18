@@ -17,6 +17,7 @@ export async function main(ns: NS): Promise<void> {
                     } else {
                         const hostname = ns.purchaseServer(`pserv-${ram}`, ram);
                         ns.tprint(`Purchased a new server: ${hostname} with ${ram}GB RAM for ${ns.nFormat(cost, '$0.000a')}`);
+                        startListeningScript(ns, hostname);
                     }
                     break; // Exit the loop after purchasing or replacing a server
                 }
@@ -40,4 +41,21 @@ function replaceWeakestServer(ns: NS, ram: number) {
     ns.deleteServer(weakestServer);
     const hostname = ns.purchaseServer(`pserv-${ram}`, ram);
     ns.tprint(`Replaced ${weakestServer} with a new server: ${hostname} with ${ram}GB RAM`);
+    startListeningScript(ns, hostname);
 }
+
+function startListeningScript(ns: NS, hostname: string) {
+    try {
+        ns.scp('services/port-listen-service.js', hostname)
+    } catch {
+        ns.tprintf(`Failed to copy port-listen-service.js to ${hostname}`)
+        return
+    }
+    const memoryUsage = ns.getScriptRam('services/port-listen-service.js')
+    const serverRam = ns.getServerMaxRam(hostname) - ns.getServerUsedRam(hostname)
+    const threads = Math.floor(serverRam / memoryUsage)
+    if (threads <= 0 || threads === Infinity || isNaN(threads)) {
+        return
+    }
+    ns.exec('services/port-listen-service.js', hostname, threads)
+} 

@@ -3,7 +3,7 @@ const portChannels = Object.freeze({
     responseQueue: 2,
 });
 
-type PortCommand = 'hack' | 'grow' | 'weaken';
+type PortCommand = 'hack' | 'grow' | 'weaken' | 'skip';
 
 export async function main(ns: NS): Promise<void> {
     while (true) {
@@ -12,17 +12,28 @@ export async function main(ns: NS): Promise<void> {
         const availableServers = hosts.filter(o => !purchasedServers.includes(o));
 
         const serverMetrics = [] as Array<{ host: string; score: number }>
-        for (const server of availableServers) {
-            const serverScore = getServerMetrics(ns, server);
-            serverMetrics.push({ host: server, score: serverScore })
-        }
+        try {
+            for (const server of availableServers) {
+                const serverScore = getServerMetrics(ns, server);
+                serverMetrics.push({ host: server, score: serverScore })
+            }
 
-        const sorted = [...serverMetrics].sort((a, b) => b.score - a.score).filter(({ score }) => score > 0)
+            const sorted = [...serverMetrics].sort((a, b) => b.score - a.score).filter(({ score }) => score > 0)
 
-        for (const server of sorted) {
-            ns.writePort(portChannels.commandQueue, JSON.stringify({ action: 'hack', target: server.host }));
+            for (const server of sorted) {
+                const action = getPreferredAction(ns, server.host);
+                if (action === 'skip') {
+                    continue;
+                }
+                const message = JSON.stringify({ action, target: server.host });
+                ns.writePort(portChannels.commandQueue, message);
+                ns.write('logs/port-command-log.txt', `${message}\n`, 'a')
+            }
+        } catch {
+            continue;
+        } finally {
+            await ns.sleep(500)
         }
-        await ns.sleep(5000)
     }
 }
 
@@ -34,6 +45,9 @@ function getPreferredAction(ns: NS, server: string): PortCommand {
     }
     if (ns.getServerMoneyAvailable(server) > serverMoneyThreshold) {
         return 'grow'
+    }
+    if (ns.hackAnalyze(server) <= 0) {
+        return 'skip'
     }
     return 'hack';
 }
