@@ -1,4 +1,4 @@
-export async function main(ns : NS) : Promise<void> {
-    const [target] = ns.args as string[];
-    await ns.weaken(target)
+export async function main(ns: NS): Promise<void> {
+  const [target] = ns.args as string[]
+  await ns.weaken(target)
 }
