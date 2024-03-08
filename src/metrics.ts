@@ -7,7 +7,7 @@ export async function main(ns: NS): Promise<void> {
   }))
 }
 
-function getAllServers(ns: NS, start = "home", visited = [] as string[]) {
+function getAllServers(ns: NS, start = 'home', visited = [] as string[]) {
   visited.push(start)
   const neighbors = ns.scan(start).filter((server) => !visited.includes(server))
   for (const neighbor of neighbors) {

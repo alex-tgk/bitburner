@@ -8,7 +8,7 @@
  */
 export function getAllServers(
   ns: NS,
-  start = "home",
+  start = 'home',
   visited = new Set<string>(),
 ): string[] {
   visited.add(start)

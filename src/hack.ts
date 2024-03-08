@@ -1,11 +1,11 @@
 export async function main(ns: NS): Promise<void> {
   const target = ns.args[0]
-  if (typeof target !== "string") {
-    ns.tprint("Invalid target")
+  if (typeof target !== 'string') {
+    ns.tprint('Invalid target')
     ns.exit()
   }
-  if (target === "") {
-    ns.tprint("No target specified")
+  if (target === '') {
+    ns.tprint('No target specified')
     ns.exit()
   }
   await hackTarget(ns, target)

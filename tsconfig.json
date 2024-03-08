@@ -2,7 +2,13 @@
   "include": [
     "NetscriptDefinitions.d.ts",
     "global.d.ts",
-    "src/**/*",
+    "src/**/*", "src/scripts/index.d.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "scripts",
+    "typings"
   ],
   "compilerOptions": {
     "module": "esnext",

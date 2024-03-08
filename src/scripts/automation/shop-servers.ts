@@ -1,13 +1,13 @@
 /** @param {NS} ns **/
 export async function main(ns: NS): Promise<void> {
   const maxServers = ns.getPurchasedServerLimit()
-  const moneyThreshold = ns.getServerMoneyAvailable("home") * 0.1 // Keep 10% of your money
+  const moneyThreshold = ns.getServerMoneyAvailable('home') * 0.4 // Keep 10% of your money
   const ramOptions = [
     8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768,
   ] // Possible RAM options for servers
 
   while (true) {
-    const currentFunds = ns.getServerMoneyAvailable("home")
+    const currentFunds = ns.getServerMoneyAvailable('home')
     const servers = ns.getPurchasedServers()
 
     if (
@@ -22,16 +22,16 @@ export async function main(ns: NS): Promise<void> {
           } else {
             const hostname = ns.purchaseServer(`pserv-${ram}`, ram)
             ns.tprint(
-              `Purchased a new server: ${hostname} with ${ram}GB RAM for ${ns.nFormat(cost, "$0.000a")}`,
+              `Purchased a new server: ${hostname} with ${ram}GB RAM for ${ns.nFormat(cost, '$0.000a')}`,
             )
-            startListeningScript(ns, hostname)
+            //startListeningScript(ns, hostname)
           }
           break // Exit the loop after purchasing or replacing a server
         }
       }
     }
 
-    await ns.sleep(60000) // Wait for a minute before checking again
+    await ns.sleep(10000) // Wait for a minute before checking again
   }
 }
 
@@ -64,16 +64,16 @@ function replaceWeakestServer(ns: NS, ram: number) {
 
 function startListeningScript(ns: NS, hostname: string) {
   try {
-    ns.scp("services/port-listen-service.js", hostname)
+    ns.scp('services/port-listen-service.js', hostname)
   } catch {
     ns.tprintf(`Failed to copy port-listen-service.js to ${hostname}`)
     return
   }
-  const memoryUsage = ns.getScriptRam("services/port-listen-service.js")
+  const memoryUsage = ns.getScriptRam('services/port-listen-service.js')
   const serverRam = ns.getServerMaxRam(hostname) - ns.getServerUsedRam(hostname)
   const threads = Math.floor(serverRam / memoryUsage)
   if (threads <= 0 || threads === Infinity || isNaN(threads)) {
     return
   }
-  ns.exec("services/port-listen-service.js", hostname, threads)
+  ns.exec('services/port-listen-service.js', hostname, threads)
 }

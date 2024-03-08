@@ -1,4 +1,5 @@
-import { calculateThreads } from "/lib/script-utils"
+import { calculateThreads } from '/lib/script-utils'
+import { getHosts } from '/scripts/utils/hosts'
 
 /**
  * Runs a specified script on all servers.
@@ -8,10 +9,7 @@ import { calculateThreads } from "/lib/script-utils"
  * @returns A Promise that resolves when all scripts have been executed.
  */
 export async function main(ns: NS): Promise<void> {
-  const hosts = ns
-    .read("hosts.txt")
-    .split("\n")
-    .filter((host) => host !== "")
+  const hosts = getHosts(ns, true)
   const targetScript = ns.args[0] as string
   if (!ns.fileExists(targetScript)) {
     ns.tprint(`The script ${targetScript} does not exist`)

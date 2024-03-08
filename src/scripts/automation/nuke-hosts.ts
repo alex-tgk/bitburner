@@ -5,9 +5,9 @@
  * @returns A promise that resolves when the main logic is complete.
  */
 export async function main(ns: NS): Promise<void> {
-  const allHosts = ns.read("hosts.txt").split("\n")
+  const allHosts = ns.read('hosts.txt').split('\n')
   for (const host of allHosts) {
-    if (host === "") {
+    if (host === '') {
       continue
     }
     await openPorts(ns, host)

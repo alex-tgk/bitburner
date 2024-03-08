@@ -13,7 +13,7 @@ export async function main(ns: NS): Promise<void> {
   ): Promise<ServerWithContracts[]> {
     visited.add(server)
     const foundContracts: ServerWithContracts[] = []
-    const contracts = ns.ls(server, ".cct")
+    const contracts = ns.ls(server, '.cct')
 
     if (contracts.length > 0) {
       foundContracts.push({ name: server, contracts: contracts })
@@ -31,11 +31,11 @@ export async function main(ns: NS): Promise<void> {
 
   // Start scanning from 'home'
   const visited = new Set<string>()
-  const contractsFound = await scanServers("home", visited)
+  const contractsFound = await scanServers('home', visited)
 
   // Output the results
   if (contractsFound.length === 0) {
-    ns.tprint("No contracts found.")
+    ns.tprint('No contracts found.')
   } else {
     contractsFound.forEach((server) => {
       server.contracts.forEach((contract) => {

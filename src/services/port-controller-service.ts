@@ -42,7 +42,7 @@ export async function main(ns: NS): Promise<void> {
     } catch {
       continue
     } finally {
-      await ns.sleep(5 * 1000)
+      await ns.sleep(0.25 * 1000)
     }
   }
 }

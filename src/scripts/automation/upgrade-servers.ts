@@ -6,7 +6,7 @@ export async function main(ns: NS): Promise<void> {
   const minimumBalanceRatio = 0.05 // Keep at least 5% of your total money
 
   while (true) {
-    const currentFunds = ns.getServerMoneyAvailable("home")
+    const currentFunds = ns.getServerMoneyAvailable('home')
     const minimumBalance = currentFunds * minimumBalanceRatio
     const servers = ns.getPurchasedServers().map((server) => ({
       hostname: server,

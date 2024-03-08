@@ -1,16 +1,16 @@
-import { NS, ProcessInfo } from "@ns"
+import { NS, ProcessInfo } from '@ns'
 
 export async function main(ns: NS): Promise<void> {
   const hashes: Record<string, number> = {}
 
-  const files = ns.ls("home", ".js")
+  const files = ns.ls('home', '.js')
   for (const file of files) {
     const contents = ns.read(file)
     hashes[file] = getHash(contents)
   }
 
   while (true) {
-    const files = ns.ls("home", ".js")
+    const files = ns.ls('home', '.js')
 
     for (const file of files) {
       const contents = ns.read(file)

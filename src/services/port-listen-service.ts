@@ -29,7 +29,12 @@ export async function main(ns: NS): Promise<void> {
     }
     try {
       const commandFn = commandOptions[action as keyof typeof commandOptions]
-      const result = await commandFn(target)
+      const result = await commandFn(target, {
+        threads: Math.floor(
+          ns.getPurchasedServerMaxRam() /
+            ns.getScriptRam('port-listen-service.js'),
+        ),
+      })
       ns.writePort(
         portChannels.responseQueue,
         JSON.stringify({ action, target, result }),

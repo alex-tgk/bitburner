@@ -8,11 +8,11 @@
 export async function main(ns: NS): Promise<void> {
   const targetScript = ns.args[0]
   const host = ns.getHostname()
-  if (typeof targetScript !== "string") {
-    throw new Error("No target script provided")
+  if (typeof targetScript !== 'string') {
+    throw new Error('No target script provided')
   }
   if (targetScript.length === 0) {
-    throw new Error("No target script provided")
+    throw new Error('No target script provided')
   }
   const scriptRam = ns.getScriptRam(targetScript)
   const freeMemory = ns.getServerMaxRam(host) - ns.getServerUsedRam(host)
