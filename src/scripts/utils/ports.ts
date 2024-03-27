@@ -25,5 +25,11 @@ export const getPortData = <T>(ns: NS, port: Port, peek = true): void | T => {
   if (data === 'NULL PORT DATA') {
     return
   }
-  return JSON.parse(data as string)
+  const results = JSON.parse(data.toString())
+  if (typeof results === 'object') {
+    return results as T
+  }
+  if (typeof results === 'string') {
+    return JSON.parse(results) as T
+  }
 }

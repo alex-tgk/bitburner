@@ -1,5 +1,5 @@
 import { NS } from '@ns'
-import { log } from '/scripts/utils/log'
+import { log } from '/scripts/logger/logger'
 
 interface Args extends ReturnType<NS['flags']> {
   delay: number

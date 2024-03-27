@@ -1,4 +1,4 @@
-import { log } from '/scripts/utils/log'
+import { log } from '/scripts/logger/logger'
 import { getPortData, Port, writePort } from '/scripts/utils/ports'
 
 export interface ServerData {
@@ -19,17 +19,22 @@ export interface ServerData {
 }
 
 export interface DataStore {
+  readonly staleCounter: number
   readonly updatedOn: Date
-  hosts: ServerData[]
-  purchasedHostnames: string[]
+  readonly hosts: ServerData[]
+  readonly purchasedHostnames: string[]
+  readonly totals: {
+    playerOwnedMemory: number
+  }
 }
 
 export const setDb = async (
   ns: NS,
   data: DataStore | ((prev: DataStore) => DataStore),
 ): Promise<DataStore> => {
+  log(ns, 'Setting db...', 'INFO', false)
   const dataStore: DataStore =
-    typeof data === 'function' ? data({ ...(await getDb(ns)) }) : data
+    typeof data === 'function' ? data(await getDb(ns)) : data
   writePort(ns, Port.db, dataStore, true)
   writeDbToFile(ns, dataStore)
   return dataStore
@@ -51,17 +56,14 @@ export const getDb = async (ns: NS): Promise<DataStore> => {
   if (fromPort) {
     return fromPort
   }
-  const fromFile = await getDbFromFile(ns)
-  if (fromFile) {
-    return fromFile
-  }
   log(ns, 'No db found, creating new db...', 'INFO', true)
   return waitForDbRefresh(ns)
 }
 
 const waitForDbRefresh = async (ns: NS): Promise<DataStore> => {
-  log(ns, 'Triggering db refresh...', 'INFO', false)
+  log(ns, 'Triggering db refresh...', 'INFO', true)
   ns.exec('/scripts/storage/refresh-db-store.js', 'home')
+  await ns.sleep(1000)
   await ns.nextPortWrite(Port.db)
 
   return getDb(ns)

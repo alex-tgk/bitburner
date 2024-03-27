@@ -22,7 +22,7 @@ export async function main(ns: NS): Promise<void> {
           } else {
             const hostname = ns.purchaseServer(`pserv-${ram}`, ram)
             ns.tprint(
-              `Purchased a new server: ${hostname} with ${ram}GB RAM for ${ns.nFormat(cost, '$0.000a')}`,
+              `Purchased a new server: ${hostname} with ${ram}GB RAM for $${ns.formatNumber(cost, 2)}`,
             )
             //startListeningScript(ns, hostname)
           }
@@ -31,7 +31,7 @@ export async function main(ns: NS): Promise<void> {
       }
     }
 
-    await ns.sleep(10000) // Wait for a minute before checking again
+    await ns.sleep(2500) // Wait for a minute before checking again
   }
 }
 
@@ -59,7 +59,7 @@ function replaceWeakestServer(ns: NS, ram: number) {
   ns.tprint(
     `Replaced ${weakestServer} with a new server: ${hostname} with ${ram}GB RAM`,
   )
-  startListeningScript(ns, hostname)
+  //startListeningScript(ns, hostname)
 }
 
 function startListeningScript(ns: NS, hostname: string) {

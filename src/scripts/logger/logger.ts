@@ -1,4 +1,4 @@
-type LogLevel = 'MESSAGE' | 'INFO' | 'ERROR' | 'SUCCESS' | 'WARN'
+export type LogLevel = 'MESSAGE' | 'INFO' | 'ERROR' | 'SUCCESS' | 'WARN'
 
 /**
  * Logs a message with a specified log level.
@@ -36,11 +36,11 @@ export const log = (
     logCommand(line)
   }
 
-  try {
+  /* try {
     ns.write('log.txt', output.join(''), 'a')
   } catch (e) {
     ns.tprint(`Error writing to log: ${e}`)
-  }
+  } */
 }
 
 const formatLogMessage = (timestamp: string, type: string, message: string) =>
